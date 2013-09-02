@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <title>socket</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        #J_sessionID {
+            font-size: 20px;
+        }
+    </style>
+    <script type="text/javascript" src="./node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js"></script>
+</head>
+<body>
+    <span id="J_sessionID"></span>
+    <br /><br /><br /><br />
+    <button id="J_run">运行</button>
+<script>
+
+    var UA = window.navigator.userAgent;
+    // 如果是移动设备，跳转到Demo执行页面
+    if(/Mobile/.test(UA)){
+        window.location.href = './run.html';
+    }
+
+    var device = [];
+
+    var socket = io.connect('http://localhost:8080');
+
+    socket.on('connect', function(data){
+        console.log(this.socket.sessionid);
+        document.getElementById('J_sessionID').innerHTML = this.socket.sessionid;
+    });
+
+    
+    socket.on('new client connected', function(data){
+        console.log('new client connected: ' + data.UA);
+        console.log(data.sessionID);
+
+        device.push([data.UA, data.sessionID]);
+    });
+
+    document.getElementById('J_run').onclick = function(){
+        socket.emit('run', {
+            'device': device,
+            'demo': {
+                'html': 'demo html...',
+                'css': 'demo css...',
+                'javascript': 'demo javascript...'
+            }
+        });
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>html5 forms</title>
+		<style type="text/css">
+			span {
+				position: absolute;
+				left: 12;
+				top: 10;
+				color: #666;
+			}
+		</style>
+	</head>
+	<body>
+		<form>
+			<input type="text" id="J_input" placeholder="" />
+			<span id="J_holder">test</span>
+		</form>
+		<script type="text/javascript">
+			document.getElementById("J_holder").onclick = function(){
+				document.getElementById("J_input").focus();
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <title>run</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        
+    </style>
+    <script type="text/javascript" src="./node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js"></script>
+</head>
+<body>
+    <input type="text" id="J_devSessionId" /><button id="J_connect">连接</button>
+
+    <form action="./demo.php" target="demo" id="J_form" method="POST">
+        <input type="text" id="J_html" name="html" /><br />
+        <input type="text" id="J_css" name="css" /><br />
+        <input type="text" id="J_javascript" name="javascript" /><br />
+        <input type="submit" value="submit"/>
+    </form>
+    <iframe src="./demo.php" name="demo"></iframe>
+<script>
+
+    var UA = window.navigator.userAgent;
+    
+    document.getElementById('J_connect').onclick = function(){
+        var socket = io.connect('http://localhost:8080');
+
+        socket.on('connect', function(data){
+            console.log(this.socket.sessionid);
+
+            socket.emit('send device info', {
+                'UA': UA,
+                'devSessionId': document.getElementById('J_devSessionId').value
+            });
+        });
+
+        socket.on('device run', function(data){
+            console.log(data.demo);
+
+            var demo = data.demo;
+
+            document.getElementById('J_html').value = demo.html;
+            document.getElementById('J_css').value = demo.css;
+            document.getElementById('J_javascript').value = demo.javascript;
+
+            document.getElementById('J_form').submit();
+        });
+    };
+
+</script>
+
+</body>
+</html>
